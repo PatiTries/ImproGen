@@ -22,44 +22,54 @@ uebungen = {
         "Ja, und... - Spieler akzeptieren jedes Angebot und bauen darauf auf.",
         "Freeze & Switch - Während einer Szene ruft jemand 'Freeze!', friert das Spiel ein und ersetzt einen Spieler.",
         "Requisiten-Impro - Spieler erhalten eine zufällige Requisite und müssen sie in die Szene einbauen."
-    ],
-    "Szenen & Rollenarbeit": [
-        "Figuren-Wechsel - Jeder Spieler wechselt innerhalb einer Szene mehrfach seine Rolle.",
-        "Monolog vs. Dialog - Eine Szene wird als Monolog begonnen und dann in einen Dialog überführt.",
-        "Beziehungstest - Zwei Charaktere interagieren ohne Worte, nur über Körpersprache."
-    ],
-    "Storytelling & Dramaturgie": [
-        "Heldenreise in 3 Minuten - Die Spieler improvisieren eine klassische Heldenreise.",
-        "Genre-Wechsel - Eine Szene beginnt in einem Genre und wechselt plötzlich in ein anderes.",
-        "Erzähler vs. Spieler - Einer erzählt, die anderen spielen das Gesagte aus."
-    ],
-    "Wahrnehmung & Präsenz": [
-        "Augenkontakt-Impro - Eine Szene, in der die Spieler sich nicht aus den Augen lassen dürfen.",
-        "Bühnenfokus setzen - Spieler müssen bewusst mit Aufmerksamkeit im Raum arbeiten.",
-        "Still-Impro - Eine Szene ohne Worte, rein über Bewegung und Ausdruck."
-    ],
-    "Spaß & Extra": [
-        "Gegenteilszene - Spieler spielen eine Szene mit komplett gegenteiligen Reaktionen.",
-        "Impro-Song - Eine normale Szene, aber jeder Satz muss gesungen werden.",
-        "Übertriebene Emotionen - Alles wird maximal dramatisch oder übertrieben lustig gespielt."
     ]
 }
 
-def zufaellige_uebung(kategorie=None):
-    if kategorie and kategorie in uebungen:
-        return random.choice(uebungen[kategorie])
+# Hintergrundfarbe setzen
+st.markdown(
+    """
+    <style>
+        body {
+            background-color: #303030;
+        }
+        .filter-box {
+            background-color: #61595f;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .filter-box:hover {
+            border: 2px solid white;
+        }
+        .stButton>button {
+            background-color: #61595f;
+            color: white;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+        .stButton>button:hover {
+            border: 2px solid white;
+        }
+        .stButton>button:active {
+            background-color: #4a1847;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Titel der App
+st.markdown("<h1 style='text-align: center; color: white;'>Impro-Generator</h1>", unsafe_allow_html=True)
+
+# Mehrfachauswahl für Kategorien
+kategorien = st.multiselect("Wähle Kategorien:", list(uebungen.keys()))
+
+# Button zum Generieren der Übung
+if st.button("Übung generieren!"):
+    if not kategorien:
+        st.write("Bitte wähle mindestens eine Kategorie.")
     else:
-        gesamt_liste = sum(uebungen.values(), [])
-        return random.choice(gesamt_liste) if gesamt_liste else "Keine Übungen vorhanden"
-
-# Streamlit App
-st.title("🎭 Impro-Übungsgenerator")
-
-# Kategorie Auswahl
-kategorie = st.selectbox("Wähle eine Kategorie:", ["Alle"] + list(uebungen.keys()))
-
-if st.button("Übung generieren! 🎲"):
-    if kategorie == "Alle":
-        st.write("**Zufällige Übung:**", zufaellige_uebung())
-    else:
-        st.write(f"**Zufällige Übung aus {kategorie}:**", zufaellige_uebung(kategorie))
+        ausgewaehlte_kategorie = random.choice(kategorien)
+        uebung = random.choice(uebungen[ausgewaehlte_kategorie])
+        st.markdown(f"<p style='text-align: center; font-style: italic; color: #cccccc;'>{ausgewaehlte_kategorie}</p>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='text-align: center; font-weight: bold; color: white;'>{uebung.split(' - ')[0]}</h2>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; color: #cccccc;'>{uebung.split(' - ')[1]}</p>", unsafe_allow_html=True)
